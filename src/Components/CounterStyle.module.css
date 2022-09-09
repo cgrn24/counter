@@ -1,0 +1,44 @@
+.outerborder {
+  border: 1px;
+  border-radius: 5px 5px 5px 5px;
+  border-style: solid;
+  width: 340px;
+  padding: 20px;
+  justify-content: center;
+}
+.content {
+  width: 300px;
+}
+.counter {
+  justify-content: center;
+  width: 300px;
+  border: 1px;
+  border-radius: 5px 5px 5px 5px;
+  border-style: solid;
+  font-size: 60px;
+  background-color: rgb(132, 139, 145);
+  padding: 20px;
+}
+.counterStop {
+  justify-content: center;
+  width: 300px;
+  border: 1px;
+  border-radius: 5px 5px 5px 5px;
+  border-style: solid;
+  font-size: 60px;
+  background-color: rgb(132, 139, 145);
+  padding: 20px;
+  color: red;
+}
+.buttonContainer {
+  padding: 20px;
+  width: 300px;
+  border: 1px;
+  border-color: rgb(132, 139, 145);
+  border-style: solid;
+  border-radius: 5px 5px 5px 5px;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  column-gap: 20px;
+}
