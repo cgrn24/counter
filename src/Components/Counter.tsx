@@ -2,28 +2,47 @@ import { useState } from 'react'
 import { UniversalButton } from './Button'
 import style from './CounterStyle.module.css'
 
-export const Counter = () => {
-  const [count, setCount] = useState(0)
+type CounterPropsType = {
+  count: number
+  setCount: (count: number) => void
+  error: boolean
+  setError: (error: boolean) => void
+  minValue: number
+  maxValue: number
+  setMinValue: (minValue: number) => void
+  setMaxValue: (maxValue: number) => void
+  settingDisabler: boolean
+  setSettingDisabler: (settingDisabler: boolean) => void
+}
+
+export const Counter = (props: CounterPropsType) => {
   const countHandler = () => {
-    if (count !== 5) {
-      setCount(count + 1)
+    if (props.count !== props.maxValue) {
+      props.setCount(props.count + 1)
     }
   }
   const resetHandler = () => {
-    setCount(0)
+    props.setCount(0)
   }
 
-  const counterClasses = count === 5 ? style.counterStop : style.counter
+  const counterClasses = props.count === props.maxValue ? style.counterStop : style.counter
 
   return (
     <div className={style.outerborder}>
-      <div className={style.content}>
-        <div className={counterClasses}>{count}</div>
-        <div className={style.buttonContainer}>
-          <UniversalButton handler={countHandler} name={'inc'} disable={count === 5} />
-          <UniversalButton handler={resetHandler} name={'reset'} disable={count === 0} />
+      {props.error && (
+        <div className={style.content}>
+          <div className={style.incorrectValue}>Incorrect value</div>
         </div>
-      </div>
+      )}
+      {!props.error && (
+        <div className={style.content}>
+          <div className={counterClasses}>{props.count}</div>
+          <div className={style.buttonContainer}>
+            <UniversalButton handler={countHandler} name={'inc'} disable={props.count === props.maxValue} />
+            <UniversalButton handler={resetHandler} name={'reset'} disable={props.count === props.minValue} />
+          </div>
+        </div>
+      )}
     </div>
   )
 }
