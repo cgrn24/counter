@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import logo from './logo.svg'
 import './App.css'
 import { Counter } from './Components/Counter'
@@ -10,6 +10,26 @@ function App() {
   const [maxValue, setMaxValue] = useState<number>(5)
   const [count, setCount] = useState<number>(0)
   const [settingDisabler, setSettingDisabler] = useState<boolean>(false)
+
+  useEffect(() => {
+    let minvalue = localStorage.getItem('minValue')
+    if (minvalue) {
+      let newMinValue = JSON.parse(minvalue)
+      setMinValue(newMinValue)
+    }
+    let maxvalue = localStorage.getItem('maxValue')
+    if (maxvalue) {
+      let newMaxValue = JSON.parse(maxvalue)
+      setMaxValue(newMaxValue)
+    }
+  }, [])
+  useEffect(() => {
+    localStorage.setItem('minValue', JSON.stringify(minValue))
+  }, [minValue])
+  useEffect(() => {
+    localStorage.setItem('maxValue', JSON.stringify(maxValue))
+  }, [maxValue])
+
   return (
     <div className='App'>
       <Settings

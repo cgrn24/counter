@@ -26,55 +26,19 @@ export const Settings = (props: SettingPropsType) => {
   }
 
   const changeMinValue = (e: FormEvent<HTMLInputElement>) => {
-    if (e.currentTarget.valueAsNumber === maxValue) {
-      props.setError(true)
-    }
-    if (e.currentTarget.valueAsNumber > maxValue) {
-      props.setError(true)
-    }
-    if (e.currentTarget.valueAsNumber < maxValue) {
-      props.setError(false)
-    }
-    if (e.currentTarget.valueAsNumber < 0) {
-      props.setError(true)
-    }
-
     setMinValue(e.currentTarget.valueAsNumber)
   }
   const changeMaxValue = (e: FormEvent<HTMLInputElement>) => {
-    if (e.currentTarget.valueAsNumber === minValue) {
-      props.setError(true)
-    }
-    if (e.currentTarget.valueAsNumber < minValue) {
-      props.setError(true)
-    }
-    if (e.currentTarget.valueAsNumber > minValue) {
-      props.setError(false)
-    }
-    if (e.currentTarget.valueAsNumber <= 0) {
-      props.setError(true)
-    }
-
     setMaxValue(e.currentTarget.valueAsNumber)
   }
+
   useEffect(() => {
-    let minvalue = localStorage.getItem('minValue')
-    if (minvalue) {
-      let newMinValue = JSON.parse(minvalue)
-      setMinValue(newMinValue)
+    if (minValue > maxValue || minValue < 0 || minValue === maxValue) {
+      props.setError(true)
+    } else {
+      props.setError(false)
     }
-    let maxvalue = localStorage.getItem('maxValue')
-    if (maxvalue) {
-      let newMaxValue = JSON.parse(maxvalue)
-      setMaxValue(newMaxValue)
-    }
-  }, [])
-  useEffect(() => {
-    localStorage.setItem('minValue', JSON.stringify(minValue))
-  }, [minValue])
-  useEffect(() => {
-    localStorage.setItem('maxValue', JSON.stringify(maxValue))
-  }, [maxValue])
+  }, [minValue, maxValue])
 
   return (
     <div className={style.outerborder}>
