@@ -23,6 +23,8 @@ export const Settings = (props: SettingPropsType) => {
     props.setCount(minValue)
     props.setMinValue(minValue)
     props.setMaxValue(maxValue)
+    localStorage.setItem('minValue', JSON.stringify(minValue))
+    localStorage.setItem('maxValue', JSON.stringify(maxValue))
   }
 
   const changeMinValue = (e: FormEvent<HTMLInputElement>) => {
@@ -31,6 +33,19 @@ export const Settings = (props: SettingPropsType) => {
   const changeMaxValue = (e: FormEvent<HTMLInputElement>) => {
     setMaxValue(e.currentTarget.valueAsNumber)
   }
+
+  useEffect(() => {
+    let minvalue = localStorage.getItem('minValue')
+    if (minvalue) {
+      let newMinValue = JSON.parse(minvalue)
+      setMinValue(newMinValue)
+    }
+    let maxvalue = localStorage.getItem('maxValue')
+    if (maxvalue) {
+      let newMaxValue = JSON.parse(maxvalue)
+      setMaxValue(newMaxValue)
+    }
+  }, [])
 
   useEffect(() => {
     if (minValue > maxValue || minValue < 0 || minValue === maxValue) {

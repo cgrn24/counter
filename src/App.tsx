@@ -12,6 +12,14 @@ function App() {
   const [settingDisabler, setSettingDisabler] = useState<boolean>(false)
 
   useEffect(() => {
+    let countvalue = localStorage.getItem('count')
+    if (countvalue) {
+      let newCountValue = JSON.parse(countvalue)
+      setCount(newCountValue)
+    }
+  }, [])
+
+  useEffect(() => {
     let minvalue = localStorage.getItem('minValue')
     if (minvalue) {
       let newMinValue = JSON.parse(minvalue)
@@ -24,12 +32,8 @@ function App() {
     }
   }, [])
   useEffect(() => {
-    localStorage.setItem('minValue', JSON.stringify(minValue))
-  }, [minValue])
-  useEffect(() => {
-    localStorage.setItem('maxValue', JSON.stringify(maxValue))
-  }, [maxValue])
-
+    localStorage.setItem('count', JSON.stringify(count))
+  }, [count])
   return (
     <div className='App'>
       <Settings
