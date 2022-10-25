@@ -1,30 +1,20 @@
 import { FormEvent, useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
+import { changeSettingsAC, setErrorAC } from '../Reducers/counter-reducer'
+import { AppRootStateType } from '../redux/store'
 import { UniversalButton } from './Button'
 import style from './SettingsStyle.module.css'
 
-type SettingPropsType = {
-  count: number
-  setCount: (count: number) => void
-  error: boolean
-  setError: (error: boolean) => void
-  minValue: number
-  maxValue: number
-  setMinValue: (minValue: number) => void
-  setMaxValue: (maxValue: number) => void
-  settingDisabler: boolean
-  setSettingDisabler: (settingDisabler: boolean) => void
-}
-
-export const Settings = (props: SettingPropsType) => {
+export const Settings = () => {
   const [minValue, setMinValue] = useState<number>(0)
   const [maxValue, setMaxValue] = useState<number>(5)
 
+  const error = useSelector<AppRootStateType, boolean>((state) => state.error)
+  const dispatch = useDispatch()
+
   const onClickHandler = () => {
-    props.setCount(minValue)
-    props.setMinValue(minValue)
-    props.setMaxValue(maxValue)
-    localStorage.setItem('minValue', JSON.stringify(minValue))
-    localStorage.setItem('maxValue', JSON.stringify(maxValue))
+    dispatch(changeSettingsAC(minValue, maxValue))
   }
 
   const changeMinValue = (e: FormEvent<HTMLInputElement>) => {
@@ -35,23 +25,10 @@ export const Settings = (props: SettingPropsType) => {
   }
 
   useEffect(() => {
-    let minvalue = localStorage.getItem('minValue')
-    if (minvalue) {
-      let newMinValue = JSON.parse(minvalue)
-      setMinValue(newMinValue)
-    }
-    let maxvalue = localStorage.getItem('maxValue')
-    if (maxvalue) {
-      let newMaxValue = JSON.parse(maxvalue)
-      setMaxValue(newMaxValue)
-    }
-  }, [])
-
-  useEffect(() => {
     if (minValue > maxValue || minValue < 0 || minValue === maxValue) {
-      props.setError(true)
+      dispatch(setErrorAC(true))
     } else {
-      props.setError(false)
+      dispatch(setErrorAC(false))
     }
   }, [minValue, maxValue])
 
@@ -59,14 +36,14 @@ export const Settings = (props: SettingPropsType) => {
     <div className={style.outerborder}>
       <div className={style.content}>
         <div className={style.inputText}>
-          <span>max value:</span> <input value={maxValue} type={'number'} onChange={changeMaxValue} className={props.error ? style.inputError : style.input} />
+          <span>max value:</span> <input value={maxValue} type={'number'} onChange={changeMaxValue} className={error ? style.inputError : style.input} />
         </div>
         <div className={style.inputText}>
-          <span>min value:</span> <input value={minValue} type={'number'} onChange={changeMinValue} className={props.error ? style.inputError : style.input} />
+          <span>min value:</span> <input value={minValue} type={'number'} onChange={changeMinValue} className={error ? style.inputError : style.input} />
         </div>
       </div>
       <div className={style.buttonContainer}>
-        <UniversalButton handler={onClickHandler} name={'set'} disable={props.error} />
+        <UniversalButton handler={onClickHandler} name={'set'} disable={error} />
       </div>
     </div>
   )

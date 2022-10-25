@@ -1,45 +1,42 @@
 import { useState } from 'react'
+import { useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
+import { addCountAC, resetAC } from '../Reducers/counter-reducer'
+import { AppRootStateType } from '../redux/store'
 import { UniversalButton } from './Button'
 import style from './CounterStyle.module.css'
 
-type CounterPropsType = {
-  count: number
-  setCount: (count: number) => void
-  error: boolean
-  setError: (error: boolean) => void
-  minValue: number
-  maxValue: number
-  setMinValue: (minValue: number) => void
-  setMaxValue: (maxValue: number) => void
-  settingDisabler: boolean
-  setSettingDisabler: (settingDisabler: boolean) => void
-}
+export const Counter = () => {
+  const count = useSelector<AppRootStateType, number>((state) => state.count)
+  const error = useSelector<AppRootStateType, boolean>((state) => state.error)
+  const minValue = useSelector<AppRootStateType, number>((state) => state.minValue)
+  const maxValue = useSelector<AppRootStateType, number>((state) => state.maxValue)
+  const dispatch = useDispatch()
 
-export const Counter = (props: CounterPropsType) => {
   const countHandler = () => {
-    if (props.count !== props.maxValue) {
-      props.setCount(props.count + 1)
+    if (count !== maxValue) {
+      dispatch(addCountAC())
     }
   }
   const resetHandler = () => {
-    props.setCount(0)
+    dispatch(resetAC())
   }
 
-  const counterClasses = props.count === props.maxValue ? style.counterStop : style.counter
+  const counterClasses = count === maxValue ? style.counterStop : style.counter
 
   return (
     <div className={style.outerborder}>
-      {props.error && (
+      {error && (
         <div className={style.content}>
           <div className={style.incorrectValue}>Incorrect value</div>
         </div>
       )}
-      {!props.error && (
+      {!error && (
         <div className={style.content}>
-          <div className={counterClasses}>{props.count}</div>
+          <div className={counterClasses}>{count}</div>
           <div className={style.buttonContainer}>
-            <UniversalButton handler={countHandler} name={'inc'} disable={props.count === props.maxValue} />
-            <UniversalButton handler={resetHandler} name={'reset'} disable={props.count === props.minValue} />
+            <UniversalButton handler={countHandler} name={'inc'} disable={count === maxValue} />
+            <UniversalButton handler={resetHandler} name={'reset'} disable={count === minValue} />
           </div>
         </div>
       )}
